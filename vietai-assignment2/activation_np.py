@@ -33,7 +33,7 @@ def reLU(x):
     :param x: input
     """
     #[TODO 1.1]
-    return np.maximum(0, x)
+    return np.maximum(x, 0)
 
 
 def reLU_grad(a):
@@ -43,8 +43,9 @@ def reLU_grad(a):
     :param x: output of ReLU
     """
     #[TODO 1.1]
-    grad = a > 0
-    return np.int32(grad)
+    a[a<=0.0] = 0
+    a[a>0.0] = 1
+    return a
 
 def tanh(x):
     """tanh
@@ -72,7 +73,8 @@ def softmax(x):
     Softmax function.
     :param x: input
     """
-    return np.exp(x) / np.sum(np.exp(x), axis=0)
+    e_x = np.exp(x)
+    return e_x / e_x.sum()
 
 
 def softmax_minus_max(x):
@@ -81,4 +83,5 @@ def softmax_minus_max(x):
     Stable softmax function.
     :param x: input
     """
-    return np.exp(x - np.max(x)) / np.sum(np.exp(x), axis=0)
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()

@@ -1,0 +1,55 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+gradient_check.py	../gradient_check.py	1;"	kind:file	line:1
+rel_error	../gradient_check.py	/^def rel_error(x, y):$/;"	kind:function	line:9
+eval_numerical_gradient	../gradient_check.py	/^def eval_numerical_gradient(layer,x, df, verbose = True, h = 0.00001):$/;"	kind:function	line:20
+activation_np.py	../activation_np.py	1;"	kind:file	line:1
+sigmoid	../activation_np.py	/^def sigmoid(x):$/;"	kind:function	line:9
+sigmoid_grad	../activation_np.py	/^def sigmoid_grad(a):$/;"	kind:function	line:19
+reLU	../activation_np.py	/^def reLU(x):$/;"	kind:function	line:29
+reLU_grad	../activation_np.py	/^def reLU_grad(a):$/;"	kind:function	line:39
+tanh	../activation_np.py	/^def tanh(x):$/;"	kind:function	line:50
+tanh_grad	../activation_np.py	/^def tanh_grad(a):$/;"	kind:function	line:60
+softmax	../activation_np.py	/^def softmax(x):$/;"	kind:function	line:70
+softmax_minus_max	../activation_np.py	/^def softmax_minus_max(x):$/;"	kind:function	line:79
+util.py	../util.py	1;"	kind:file	line:1
+load_npy	../util.py	/^def load_npy(file_name):$/;"	kind:function	line:15
+load_list	../util.py	/^def load_list(file_name):$/;"	kind:function	line:32
+save_list	../util.py	/^def save_list(list_obj, file_name):$/;"	kind:function	line:56
+get_vehicle_data	../util.py	/^def get_vehicle_data():$/;"	kind:function	line:70
+get_bat_data	../util.py	/^def get_bat_data():$/;"	kind:function	line:83
+read_mnist_gz	../util.py	/^def read_mnist_gz(data_path, offset):$/;"	kind:function	line:94
+get_mnist_data	../util.py	/^def get_mnist_data(sampling_step=20):$/;"	kind:function	line:101
+visualize_point	../util.py	/^def visualize_point(x, y, y_hat, fig=1):$/;"	kind:function	line:129
+plot_loss	../util.py	/^def plot_loss(loss, fig=1, color='b'):$/;"	kind:function	line:179
+normalize	../util.py	/^def normalize(train_x, val_x, test_x):$/;"	kind:function	line:185
+create_one_hot	../util.py	/^def create_one_hot(labels, num_k=10):$/;"	kind:function	line:203
+add_one	../util.py	/^def add_one(x):$/;"	kind:function	line:214
+dnn_np.py	../dnn_np.py	1;"	kind:file	line:1
+Config	../dnn_np.py	/^class Config(object):$/;"	kind:class	line:15
+__init__	../dnn_np.py	/^    def __init__(self, num_epoch=1000, batch_size=100, learning_rate=0.0005, momentum_rate=0.9, epochs_to_draw=10, reg=0.00015, num_train=1000, visualize=True):$/;"	kind:member	line:16
+Layer	../dnn_np.py	/^class Layer(object):$/;"	kind:class	line:27
+__init__	../dnn_np.py	/^    def __init__(self, w_shape, activation, reg = 1e-5):$/;"	kind:member	line:28
+forward	../dnn_np.py	/^    def forward(self, x):$/;"	kind:member	line:41
+backward	../dnn_np.py	/^    def backward(self, x, delta_dot_w_prev):$/;"	kind:member	line:63
+NeuralNet	../dnn_np.py	/^class NeuralNet(object):$/;"	kind:class	line:85
+__init__	../dnn_np.py	/^    def __init__(self, num_class=2, reg = 1e-5):$/;"	kind:member	line:86
+add_linear_layer	../dnn_np.py	/^    def add_linear_layer(self, w_shape, activation):$/;"	kind:member	line:92
+forward	../dnn_np.py	/^    def forward(self, x):$/;"	kind:member	line:113
+compute_loss	../dnn_np.py	/^    def compute_loss(self, y, y_hat):$/;"	kind:member	line:125
+backward	../dnn_np.py	/^    def backward(self, y, all_x):$/;"	kind:member	line:144
+update_weight	../dnn_np.py	/^    def update_weight(self, grad_list, learning_rate):$/;"	kind:member	line:176
+update_weight_momentum	../dnn_np.py	/^    def update_weight_momentum(self, grad_list, learning_rate, momentum_rate):$/;"	kind:member	line:189
+test	../dnn_np.py	/^def test(y_hat, test_y):$/;"	kind:function	line:203
+unit_test_layer	../dnn_np.py	/^def unit_test_layer(your_layer):$/;"	kind:function	line:229
+minibatch_train	../dnn_np.py	/^def minibatch_train(net, train_x, train_y, cfg):$/;"	kind:function	line:256
+batch_train	../dnn_np.py	/^def batch_train(net, train_x, train_y, cfg):$/;"	kind:function	line:285
+bat_classification	../dnn_np.py	/^def bat_classification():$/;"	kind:function	line:320
+mnist_classification	../dnn_np.py	/^def mnist_classification():$/;"	kind:function	line:363
+dnn_tf.py	../dnn_tf.py	1;"	kind:file	line:1
+bat_classification	../dnn_tf.py	/^def bat_classification():$/;"	kind:function	line:14
+mnist_classification	../dnn_tf.py	/^def mnist_classification():$/;"	kind:function	line:93

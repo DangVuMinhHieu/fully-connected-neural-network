@@ -49,14 +49,15 @@ class Layer(object):
         
         # Compute different types of activation
         if (self.activation == 'sigmoid'):
-            result = sigmoid(result)
+            result = sigmoid(result)            
         elif (self.activation == 'relu'):
-            result = reLU(result)
+            result = reLU(result)            
         elif (self.activation == 'tanh'):
-            result = tanh(result)
-        elif (self.activation == 'softmax'):
-            result = softmax(x)
-
+            result = tanh(result)            
+        elif (self.activation == 'softmax'):            
+            result = softmax_minus_max(result)            
+            #print(self.activation , " result : ")
+            #print(result)
         self.output = result
         return result
 
@@ -77,8 +78,9 @@ class Layer(object):
         elif(self.activation == 'relu'):
            w_grad = np.dot(x.T, (delta_dot_w_prev * reLU_grad(self.output)))
 
+        #print(self.activation , " w_grad result : ", w_grad)
         # [TODO 1.4] Implement L2 regularization on weights here
-        w_grad +=  self.reg/2 * np.sum(self.w**2)
+        w_grad +=  self.reg * self.w
         return w_grad, delta_dot_w_prev.copy()
 
 
@@ -128,8 +130,7 @@ class NeuralNet(object):
 
         :param y:  the label, the actual class of the samples. e.g. 3-class classification with 9 data samples y = [0 0 0 1 1 1 2 2 2]
         :param y_hat: the propabilities that the given samples belong to class 1
-        """
-
+        """        
         # [TODO 1.3]
         # Estimating cross entropy loss from y_hat and y 
         data_loss = -np.mean(np.log(y_hat[np.arange(y.shape[0]), y]))
@@ -149,14 +150,12 @@ class NeuralNet(object):
         :param all_x: input data and activation from every layer
         """
         
-        # [TODO 1.5] Compute delta factor from the output
-        print("Near Last layer output : ", self.layers[-2].output)
-        print("and shape : ", self.layers[-2].output.shape)
-        delta = -(y.T - self.layers[-2].output)
+        # [TODO 1.5] Compute delta factor from the output                
+        delta = self.layers[-1].output - y
         delta /= y.shape[0]
         
         # [TODO 1.5] Compute gradient of the loss function with respect to w of softmax layer, use delta from the output
-        grad_last =  np.dot(delta, self.layers[-2].output.T)
+        grad_last =  np.dot(self.layers[-2].output.T, delta)
 
         grad_list = []
         grad_list.append(grad_last)
@@ -168,12 +167,12 @@ class NeuralNet(object):
 	    # [TODO 1.5] Compute delta_dot_w_prev factor for previous layer (in backpropagation direction)
 	    # delta_prev: delta^(l+1), in the start of this loop, delta_prev is also delta^(L) or delta_last
 	    # delta_dot_w_prev: delta^(l+1) dot product with w^(l+1)T
-            delta_dot_w_prev = np.dot(delta_prev, prev_layer.w.T)
+            delta_dot_w_prev = np.dot(delta_prev, prev_layer.w.T)            
 	    # Use delta_dot_w_prev to compute delta factor for the next layer (in backpropagation direction)
             grad_w, delta_prev = layer.backward(x, delta_dot_w_prev)
             grad_list.append(grad_w.copy())
 
-        grad_list = grad_list[::-1]
+        grad_list = grad_list[::-1]        
         return grad_list
     
     def update_weight(self, grad_list, learning_rate):
@@ -183,11 +182,11 @@ class NeuralNet(object):
         :param grad: gradient computed from the loss
         :param learning_rate: float, learning rate
         """
-        for i in range(len(self.layers)):
+        for i in range(len(self.layers)):            
             layer = self.layers[i]
             grad = grad_list[i]
-            layer.w = layer.w - learning_rate * grad
-    
+            layer.w = layer.w - learning_rate * grad                    
+
     
     def update_weight_momentum(self, grad_list, learning_rate, momentum_rate):
         """update_weight_momentum
@@ -266,23 +265,29 @@ def minibatch_train(net, train_x, train_y, cfg):
     :param cfg: Config object
     """
     # [TODO 1.6] Implement mini-batch training
-    train_set_x = train_x[:cfg.num_train].copy()
-    print("train_set_x shape : ", train_set_x.shape)
-    train_set_y = train_y[:cfg.num_train].copy()    
-    print("train_set_y shape : ", train_set_y.shape)        
-    for epoch in range(cfg.num_epoch):
-        num_batch = int(np.ceil(cfg.num_train / cfg.batch_size))
-        index = 0
-        for _iter in range(num_batch):
-            train_x = train_set_x[index : index + cfg.batch_size]
-            train_y = train_set_y[index : index + cfg.batch_size]
-            all_x = net.forward(train_x)
-            grads = net.backward(train_y, all_x)
-            net.update_weight(grads, cfg.learning_rate)
-        print("Epoch %d: loss is %.5f" % (epoch + 1, net.compute_loss()))
-
+    train_set_x = train_x[:cfg.num_train].copy()    
+    train_set_y = train_y[:cfg.num_train].copy()            
     
-
+    train_set_y = create_one_hot(train_set_y, net.num_class)    
+    for epoch in range(10):
+        num_batch = int(np.ceil(cfg.num_train / cfg.batch_size))
+        index = 0        
+        print("[+] Training Epoch ", epoch, "....")
+        for _iter in range(num_batch):
+            print("Training batch from %d to %d" % (index, index + cfg.batch_size - 1) )
+            x_train = train_set_x[index : index + cfg.batch_size]
+            y_train = train_set_y[index : index + cfg.batch_size]
+            print("train_x : ", x_train)
+            y_original = train_y[index : index + cfg.batch_size].copy()
+            all_x = net.forward(x_train)                                             
+            grads = net.backward(y_train, all_x)            
+            net.update_weight(grads, cfg.learning_rate) 
+            index += cfg.batch_size            
+        
+            
+        
+        
+        
 def batch_train(net, train_x, train_y, cfg):
     """batch_train
     Train the neural network using batch SGD
@@ -333,7 +338,7 @@ def bat_classification():
     test_x = add_one(test_x)
 
     # Define hyper-parameters and train-related parameters
-    cfg = Config(num_epoch=1000, learning_rate=0.001, num_train=train_x.shape[0])
+    cfg = Config(num_epoch=1000, learning_rate=0.01, num_train=train_x.shape[0])
 
     print("[+] Building network....")
     # Create NN classifier
@@ -344,8 +349,7 @@ def bat_classification():
     net.add_linear_layer((train_x.shape[1],num_hidden_nodes), 'relu')
     net.add_linear_layer((num_hidden_nodes, num_hidden_nodes_2), 'relu')
     net.add_linear_layer((num_hidden_nodes_2, num_hidden_nodes_3), 'relu')
-    net.add_linear_layer((num_hidden_nodes_3, num_class), 'softmax')
-    
+    net.add_linear_layer((num_hidden_nodes_3, num_class), 'softmax')    
     #Sanity check - train in small number of samples to see the overfitting problem- the loss value should decrease rapidly
     #cfg.num_train = 500
     #batch_train(net, train_x, train_y, cfg)
@@ -376,7 +380,7 @@ def mnist_classification():
     test_x = add_one(test_x)
 
     # Define hyper-parameters and train-related parameters
-    cfg = Config(num_epoch=300, learning_rate=0.001, batch_size=200, num_train=train_x.shape, visualize=False)
+    cfg = Config(num_epoch=300, learning_rate=0.01, batch_size=200, num_train=train_x.shape, visualize=False)
 
     # Create NN classifier
     print("[+] Building network....")
